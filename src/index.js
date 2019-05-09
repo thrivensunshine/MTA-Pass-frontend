@@ -10,6 +10,7 @@ var person3 = new Image(); person3.src = "ladyGame.png"
 var person4 = new Image(); person4.src = "oldLady.png"
 var person5 = new Image(); person5.src = "headphones.png"
 var person6 = new Image(); person6.src = "kid.png"
+var train = new Image(); train.src = "train.png"
 
 // rat image size and position
 var sx = 375;
@@ -53,6 +54,10 @@ var xSpot5 = -100
 var ySpot5 = 40
 var xSpot6 = -100
 var ySpot6 = 275
+
+//trainmoving
+var xTrain = 1000
+var yTrain = 0
 
 
 
@@ -127,6 +132,9 @@ document.addEventListener("keyup", (event) => {
         ctx.drawImage(rat, sx, sy, swidth, sheight, x, y, width, height);
       }
 
+      const drawTrain = () => {
+        ctx.drawImage(train, xTrain, yTrain, 400, 180);
+      }
       //create left moving people and move them
       const drawPeople = () => {
         leftOne = ctx.drawImage(person, (xSpot1), (ySpot1), personWidth - 270, personHeight)
@@ -171,9 +179,13 @@ document.addEventListener("keyup", (event) => {
         xSpot6 +=4
       }else{
         xSpot6 = -100
+      }
+      if(xTrain >= -250){
+        xTrain -= 3
+      }else{
+        xTrain = 1000
+      }
     }
-  }
-
     const collision = () => {
       var xArr = [xSpot1, xSpot2, xSpot3,xSpot4,xSpot5,xSpot6]
       var yArr = [ySpot1, ySpot2, ySpot3,ySpot4, ySpot5,ySpot6]
@@ -201,8 +213,11 @@ document.addEventListener("keyup", (event) => {
         drawRat();
         //move Rat
         moveRat()
-        //left walking ppl
+        //train
+        drawTrain()
+
         drawPeople()
+          //walking ppl and train
         moveIt()
         //collision
         collision()
