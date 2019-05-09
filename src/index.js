@@ -58,7 +58,8 @@ var ySpot6 = 275
 //trainmoving
 var xTrain = 1000
 var yTrain = 0
-
+var trainWidth = 400
+var trainHeight = 180
 
 
 // event listener for key press
@@ -131,11 +132,11 @@ document.addEventListener("keyup", (event) => {
       const drawRat = () => {
         ctx.drawImage(rat, sx, sy, swidth, sheight, x, y, width, height);
       }
-
+      // create train
       const drawTrain = () => {
-        ctx.drawImage(train, xTrain, yTrain, 400, 180);
+        ctx.drawImage(train, xTrain, yTrain, trainWidth, trainHeight);
       }
-      //create left moving people and move them
+      //create people
       const drawPeople = () => {
         leftOne = ctx.drawImage(person, (xSpot1), (ySpot1), personWidth - 270, personHeight)
         leftTwo = ctx.drawImage(person2, (xSpot2), (ySpot2), personWidth, personHeight)
@@ -205,6 +206,28 @@ document.addEventListener("keyup", (event) => {
 
     }
 
+    const rideTrain = () => {
+      status = ''
+      if(y <= 60){
+        console.log(y, x)
+        if(xTrain <= x - 100 + width &&
+          xTrain + (trainWidth - 90)>= x &&
+          yTrain + trainHeight >= y &&
+          yTrain <= y + height){
+            if(x <canvas.width -30){
+              x -= 3
+              status = true
+
+            }
+
+          }
+
+        }
+        if(status === true){
+          return alert("PLEASE STAND CLEAR OF THE CLOSING DOORS")
+        }
+      }
+
       //main function to call entire game
       const draw = (thing) => {
         //clears canvas so we dont have a trail of rats
@@ -218,9 +241,12 @@ document.addEventListener("keyup", (event) => {
 
         drawPeople()
           //walking ppl and train
-        moveIt()
+       moveIt()
         //collision
         collision()
+        //train ride
+        rideTrain()
+
         requestAnimationFrame(draw)
 
 
