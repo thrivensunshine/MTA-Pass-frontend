@@ -2,6 +2,10 @@
 var canvas = document.getElementById('canvas')
 var ctx = canvas.getContext('2d')
 
+//variables for Dom manupilation
+
+var pizzaTag = document.getElementById('pizza')
+
 //image variables
 var rat = new Image(); rat.src = "images/allRats2.png";
 var person = new Image(); person.src ="images/weirdeye.png";
@@ -18,6 +22,24 @@ var pizzaSlice = new Image(); pizzaSlice.src = "images/pizzaSlice.png"
 var leftPill = new Image(); leftPill.src = "images/left-pillar.png"
 var rightPill = new Image(); rightPill.src = "images/right-pillar.png"
 
+// pizza lives - pushed into array
+// var pizzaArray = []
+//
+var pizzaW1 = new Image();pizzaW1.src = 'pizza/pizza1.png';
+var pizzaW2= new Image();pizzaW2.src = 'pizza/pizza2.png';
+var pizzaW3 = new Image();pizzaW3.src = 'pizza/pizza3.png';
+var pizzaW4 = new Image();pizzaW4.src = 'pizza/pizza4.png';
+var pizzaW5 = new Image();pizzaW5.src = 'pizza/pizza5.png';
+var pizzaW6 = new Image();pizzaW6.src = 'pizza/pizza6.png';
+var pizzaW7 = new Image();pizzaW7.src = 'pizza/pizza7.png';
+var pizzaW8 = new Image();pizzaW8.src = 'pizza/pizza8.png';
+// pizzaArray.push(pizzaW1,pizzaW2,pizzaW3,pizzaW4,pizzaW5,pizzaW6,pizzaW7,pizzaW8)
+var pieSx = 100
+var pieSy = 100
+var wholePie = new Image(); wholePie.src = "pizza/wholePie.png"
+//points etc.
+var getPizza = 0
+var testPie = "pizza/pizza1.png"
 
 // rat image size and position
 var sx = 375;
@@ -100,7 +122,7 @@ document.addEventListener("keyup", (event) => {
 
 //rat moving logic, change direction, and doesnt move off canvas
 //sx changes the portion of the image we see ie changes the direction of rat
-    const moveRat = () => {
+      const moveRat = () => {
       if(upKeyPress === true && up==true && y > 10){
         console.log("bloop")
         y -= 44;
@@ -145,8 +167,22 @@ document.addEventListener("keyup", (event) => {
         ctx.drawImage(rat, sx, sy, swidth, sheight, x, y, width, height);
       }
 
+      //pizza score keeper
+      const pizzaScore = () => {
+return pizzaTag.innerHTML += `<img>${pizzaW2}</img>`
+
+      }
+  //     return `
+  // <div class="card">
+  // <h2> ${toy.name}</h2>
+  // <img src= ${toy.image} class="toy-avatar" />
+  // <p><cite data-id="${toy.id}" data-likes="${toy.likes}"> ${toy.likes} Likes </cite> </p>
+  // <button class="like-btn">Like <3</button>
+  // </div>
+// `
       const drawPizzaSlice = () => {
-        ctx.drawImage(pizzaSlice, sliceX, sliceY, sliceWH, sliceWH)
+       ctx.drawImage(pizzaSlice, sliceX, sliceY, sliceWH, sliceWH)
+
       }
       // create train
       const drawTrain = () => {
@@ -163,12 +199,14 @@ document.addEventListener("keyup", (event) => {
         leftThree = ctx.drawImage(person3, (xSpot3), (ySpot3), personWidth, personHeight)
 
       }
+      //put pillar tops in foreground
       const pillarPerspective = () => {
         leftPillar = ctx.drawImage(leftPill, -1, 0 ,80, 200)
         rightPillar = ctx.drawImage(rightPill, 905, 0,96, 200)
 
       }
-// people movemnt
+// train and people motion
+
     // -100 = very left of canvas
     // 1000 = very right of canvas
     const moveIt = () => {
@@ -208,6 +246,8 @@ document.addEventListener("keyup", (event) => {
         xTrain = 1000
       }
     }
+
+    //collision of rat and ppl
     const collision = () => {
       var xArr = [xSpot1, xSpot2, xSpot3,xSpot4,xSpot5,xSpot6]
       var yArr = [ySpot1, ySpot2, ySpot3,ySpot4, ySpot5,ySpot6]
@@ -224,12 +264,12 @@ document.addEventListener("keyup", (event) => {
         x = 400
       }
       }
-
     }
 
+//rat gets on train
     const rideTrain = () => {
-      status = ''
-      // if(y <= 60){
+
+      if(getPizza >= 8){
         // -100 front of train
         if(xTrain <= x - 100 + width &&
           // - 90 back of traun
@@ -242,37 +282,36 @@ document.addEventListener("keyup", (event) => {
               y = 0
               ctx.drawImage(ratticus, xTrain + 50, yTrain + 50, 100, 100 )
             }
-
-          // }
-
+          }
         }
         else if( y <= 60){
           y = 580
         }
         }
 
+
+// pizza collection
     const randomizeSliceSpot = () => {
+      if (getPizza < 8){
       if(sliceX <= x - 30 + width &&
         sliceX + (sliceWH - 30) >= x &&
         sliceY + sliceWH >= y &&
         sliceY <= y + height){
-
-        // sliceX = parseInt(Math.random() * (700 - 0) + 0)
-        // sliceY = parseInt(Math.random() * (600 - 0) + 0)
-
+          getPizza += 1
         sliceX = Math.round( Math.random() * (840 - 60) + 60);
         sliceY = Math.round( Math.random() * (500 - 90) + 90);
-
-
-
-
       }
-
+    }
+    else{
+      sliceX = -100
+      sliceY = 0
+    }
     }
 
 
       //main function to call entire game
-      const draw = (thing) => {
+      const draw = () => {
+        pizzaScore()
         //clears canvas so we dont have a trail of rats
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         drawPizzaSlice()
@@ -302,8 +341,7 @@ document.addEventListener("keyup", (event) => {
 
 
 
-
-
+          // console.log(getPizza)
       }
 
       draw()

@@ -1,0 +1,24 @@
+
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
+/* font-family: 'Press Start 2P', cursive; */
+
+body{
+  background: purple;
+  display: flex;
+  justify-content: center;
+  font-family: 'Press Start 2p';
+}
+canvas{
+  background-image: url("images/stationStation.png");
+  /* background-repeat: no-repeat; */
+  background-size: 100% 100%;
+
+  /* background: black; */
+  border: 4px solid green;
+}
+
+.pizza{
+height: 100;
+width: 100;
+
+}
