@@ -3,14 +3,21 @@ var canvas = document.getElementById('canvas')
 var ctx = canvas.getContext('2d')
 
 //image variables
-var rat = new Image(); rat.src = "allRats2.png";
-var person = new Image(); person.src ="weirdeye.png";
-var person2 = new Image(); person2.src = "manGame.png";
-var person3 = new Image(); person3.src = "ladyGame.png"
-var person4 = new Image(); person4.src = "oldLady.png"
-var person5 = new Image(); person5.src = "headphones.png"
-var person6 = new Image(); person6.src = "kid.png"
-var train = new Image(); train.src = "train.png"
+var rat = new Image(); rat.src = "images/allRats2.png";
+var person = new Image(); person.src ="images/weirdeye.png";
+var person2 = new Image(); person2.src = "images/manGame.png";
+var person3 = new Image(); person3.src = "images/ladyGame.png"
+var person4 = new Image(); person4.src = "images/oldLady.png"
+var person5 = new Image(); person5.src = "images/headphones.png"
+var person6 = new Image(); person6.src = "images/kid.png"
+var train = new Image(); train.src = "images/train.png"
+var ratticus = new Image(); ratticus.src = "images/ratticus.png"
+var pizzaSlice = new Image(); pizzaSlice.src = "images/pizzaSlice.png"
+
+// pillars for perspective
+var leftPill = new Image(); leftPill.src = "images/left-pillar.png"
+var rightPill = new Image(); rightPill.src = "images/right-pillar.png"
+
 
 // rat image size and position
 var sx = 375;
@@ -57,9 +64,14 @@ var ySpot6 = 275
 
 //trainmoving
 var xTrain = 1000
-var yTrain = 0
+var yTrain = -7
 var trainWidth = 400
-var trainHeight = 180
+var trainHeight = 200
+
+//pizzaSlice
+var sliceX = 800
+var sliceY = 300
+var sliceWH = 38
 
 
 // event listener for key press
@@ -132,6 +144,10 @@ document.addEventListener("keyup", (event) => {
       const drawRat = () => {
         ctx.drawImage(rat, sx, sy, swidth, sheight, x, y, width, height);
       }
+
+      const drawPizzaSlice = () => {
+        ctx.drawImage(pizzaSlice, sliceX, sliceY, sliceWH, sliceWH)
+      }
       // create train
       const drawTrain = () => {
         ctx.drawImage(train, xTrain, yTrain, trainWidth, trainHeight);
@@ -140,13 +156,18 @@ document.addEventListener("keyup", (event) => {
       const drawPeople = () => {
         leftOne = ctx.drawImage(person, (xSpot1), (ySpot1), personWidth - 270, personHeight)
         leftTwo = ctx.drawImage(person2, (xSpot2), (ySpot2), personWidth, personHeight)
-        leftThree = ctx.drawImage(person3, (xSpot3), (ySpot3), personWidth, personHeight)
+
         rightOne = ctx.drawImage(person4, (xSpot4), (ySpot4), personWidth - 150, personHeight)
         rightTwo = ctx.drawImage(person5, (xSpot5), (ySpot5), personWidth - 120, personHeight)
         rightThree = ctx.drawImage(person6, (xSpot6), (ySpot6), personWidth - 130, personHeight-35)
+        leftThree = ctx.drawImage(person3, (xSpot3), (ySpot3), personWidth, personHeight)
 
       }
+      const pillarPerspective = () => {
+        leftPillar = ctx.drawImage(leftPill, -1, 0 ,80, 200)
+        rightPillar = ctx.drawImage(rightPill, 905, 0,96, 200)
 
+      }
 // people movemnt
     // -100 = very left of canvas
     // 1000 = very right of canvas
@@ -208,46 +229,79 @@ document.addEventListener("keyup", (event) => {
 
     const rideTrain = () => {
       status = ''
-      if(y <= 60){
-        console.log(y, x)
+      // if(y <= 60){
+        // -100 front of train
         if(xTrain <= x - 100 + width &&
+          // - 90 back of traun
           xTrain + (trainWidth - 90)>= x &&
-          yTrain + trainHeight >= y &&
+          yTrain + trainHeight >= y + 100 &&
           yTrain <= y + height){
+            console.log(y, x)
             if(x <canvas.width -30){
               x -= 3
-              status = true
-
+              y = 0
+              ctx.drawImage(ratticus, xTrain + 50, yTrain + 50, 100, 100 )
             }
 
-          }
+          // }
 
         }
-        if(status === true){
-          return alert("PLEASE STAND CLEAR OF THE CLOSING DOORS")
+        else if( y <= 60){
+          y = 580
         }
+        }
+
+    const randomizeSliceSpot = () => {
+      if(sliceX <= x - 30 + width &&
+        sliceX + (sliceWH - 30) >= x &&
+        sliceY + sliceWH >= y &&
+        sliceY <= y + height){
+
+        // sliceX = parseInt(Math.random() * (700 - 0) + 0)
+        // sliceY = parseInt(Math.random() * (600 - 0) + 0)
+
+        sliceX = Math.round( Math.random() * (840 - 60) + 60);
+        sliceY = Math.round( Math.random() * (500 - 90) + 90);
+
+
+
+
       }
+
+    }
+
 
       //main function to call entire game
       const draw = (thing) => {
         //clears canvas so we dont have a trail of rats
         ctx.clearRect(0, 0, canvas.width, canvas.height)
+        drawPizzaSlice()
         //render image
         drawRat();
         //move Rat
         moveRat()
         //train
         drawTrain()
-
+        //when rat meets train
+        rideTrain()
+        //generates people
         drawPeople()
-          //walking ppl and train
-       moveIt()
+
+        //walking ppl and train
+        moveIt()
         //collision
         collision()
-        //train ride
-        rideTrain()
 
+        //placement of top half of pillars for depth
+        pillarPerspective()
+        //slice positioning
+        randomizeSliceSpot()
+        // console.log(sliceX, sliceY, "Pizza")
+        // console.log(x, y ,"rat")
         requestAnimationFrame(draw)
+
+
+
 
 
       }
