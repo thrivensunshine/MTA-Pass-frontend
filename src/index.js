@@ -25,14 +25,14 @@ var rightPill = new Image(); rightPill.src = "images/right-pillar.png"
 // pizza lives - pushed into array
 // var pizzaArray = []
 //
-var pizzaW1 = new Image();pizzaW1.src = 'pizza/pizza1.png';
-var pizzaW2= new Image();pizzaW2.src = 'pizza/pizza2.png';
-var pizzaW3 = new Image();pizzaW3.src = 'pizza/pizza3.png';
-var pizzaW4 = new Image();pizzaW4.src = 'pizza/pizza4.png';
-var pizzaW5 = new Image();pizzaW5.src = 'pizza/pizza5.png';
-var pizzaW6 = new Image();pizzaW6.src = 'pizza/pizza6.png';
-var pizzaW7 = new Image();pizzaW7.src = 'pizza/pizza7.png';
-var pizzaW8 = new Image();pizzaW8.src = 'pizza/pizza8.png';
+var pizzaW1 = new Image();pizzaW1.src = "pizza/pizza1.png";
+var pizzaW2 = new Image();pizzaW2.src = "pizza/pizza2.png";
+var pizzaW3 = new Image();pizzaW3.src = "pizza/pizza3.png";
+var pizzaW4 = new Image();pizzaW4.src = "pizza/pizza4.png";
+var pizzaW5 = new Image();pizzaW5.src = "pizza/pizza5.png";
+var pizzaW6 = new Image();pizzaW6.src = "pizza/pizza6.png";
+var pizzaW7 = new Image();pizzaW7.src = "pizza/pizza7.png";
+var pizzaW8 = new Image();pizzaW8.src = "pizza/pizza8.png";
 // pizzaArray.push(pizzaW1,pizzaW2,pizzaW3,pizzaW4,pizzaW5,pizzaW6,pizzaW7,pizzaW8)
 var pieSx = 100
 var pieSy = 100
@@ -169,7 +169,7 @@ document.addEventListener("keyup", (event) => {
 
       //pizza score keeper
       const pizzaScore = () => {
-return pizzaTag.innerHTML += `<img>${pizzaW2}</img>`
+      return pizzaTag.innerHTML += `<img>${pizzaW2}</img>`
 
       }
   //     return `
