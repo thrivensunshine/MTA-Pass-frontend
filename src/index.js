@@ -2,6 +2,24 @@
 var canvas = document.getElementById('canvas')
 var ctx = canvas.getContext('2d')
 
+//for mobile
+document.getElementById('left').addEventListener('touchstart', () => leftKeyPress = true);
+document.getElementById('left').addEventListener('touchend', () => leftKeyPress = false);
+document.getElementById('right').addEventListener('touchstart', () => rightKeyPress = true);
+document.getElementById('right').addEventListener('touchend', () => rightKeyPress = false);
+document.getElementById('up').addEventListener('touchstart', () => upKeyPress = true);
+document.getElementById('up').addEventListener('touchend', () => upKeyPress = false);
+document.getElementById('down').addEventListener('touchstart', () => downKeyPress = true);
+document.getElementById('down').addEventListener('touchend', () => downKeyPress = false);
+
+
+// const resizeCanvas = () => {
+//   canvas.width = window.innerWidth * 0.9;  // 90% of screen width
+//   canvas.height = window.innerHeight * 0.8;  // 80% of screen height
+// };
+
+// window.addEventListener('resize', resizeCanvas);
+// resizeCanvas();  // Initial call to set canvas size
 //variables for Dom manupilation
 
 var pizzaTag = document.getElementById('pizza')
@@ -23,7 +41,7 @@ var leftPill = new Image(); leftPill.src = "images/left-pillar.png"
 var rightPill = new Image(); rightPill.src = "images/right-pillar.png"
 
 // pizza lives - pushed into array
-// var pizzaArray = []
+ var pizzaArray = []
 //
 var pizzaW1 = new Image();pizzaW1.src = "pizza/pizza1.png";
 var pizzaW2 = new Image();pizzaW2.src = "pizza/pizza2.png";
@@ -33,7 +51,7 @@ var pizzaW5 = new Image();pizzaW5.src = "pizza/pizza5.png";
 var pizzaW6 = new Image();pizzaW6.src = "pizza/pizza6.png";
 var pizzaW7 = new Image();pizzaW7.src = "pizza/pizza7.png";
 var pizzaW8 = new Image();pizzaW8.src = "pizza/pizza8.png";
-// pizzaArray.push(pizzaW1,pizzaW2,pizzaW3,pizzaW4,pizzaW5,pizzaW6,pizzaW7,pizzaW8)
+pizzaArray.push(pizzaW1,pizzaW2,pizzaW3,pizzaW4,pizzaW5,pizzaW6,pizzaW7,pizzaW8)
 var pieSx = 100
 var pieSy = 100
 var wholePie = new Image(); wholePie.src = "pizza/wholePie.png"
@@ -97,28 +115,46 @@ var sliceWH = 38
 
 
 // event listener for key press
-//keydown
 document.addEventListener("keydown", (event) => {
-  if(event.keyCode == 39){
-    // console.log("down")
-    rightKeyPress = true}
-    if(event.keyCode == 37){leftKeyPress = true}
-    if(event.keyCode == 38){upKeyPress = true}
-    if(event.keyCode == 40){downKeyPress = true}
+  if (event.keyCode === 39) { // Right arrow
+    rightKeyPress = true;
+  } 
+  if (event.keyCode === 37) { // Left arrow
+    leftKeyPress = true;
+  }
+  if (event.keyCode === 38) { // Up arrow
+    upKeyPress = true;
+  }
+  if (event.keyCode === 40) { // Down arrow
+    downKeyPress = true;
+  }
 
-  }, false);
+  // Prevent the default action for arrow keys to stop scrolling
+  if ([37, 38, 39, 40].includes(event.keyCode)) {
+    event.preventDefault();
+  }
+}, false);
 
-//keyup event listener
 document.addEventListener("keyup", (event) => {
-  if(event.keyCode == 39){
-    // console.log("up")
-    rightKeyPress = false}
-    if(event.keyCode == 37){leftKeyPress = false}
-    if(event.keyCode == 38){
-      // console.log("GOING UP")
-      upKeyPress = false}
-      if(event.keyCode == 40){downKeyPress = false}
-    }, false);
+  if (event.keyCode === 39) {
+    rightKeyPress = false;
+  } 
+  if (event.keyCode === 37) {
+    leftKeyPress = false;
+  }
+  if (event.keyCode === 38) {
+    upKeyPress = false;
+  }
+  if (event.keyCode === 40) {
+    downKeyPress = false;
+  }
+
+  // Prevent default for arrow keys on keyup as well
+  if ([37, 38, 39, 40].includes(event.keyCode)) {
+    event.preventDefault();
+  }
+}, false);
+
 
 //rat moving logic, change direction, and doesnt move off canvas
 //sx changes the portion of the image we see ie changes the direction of rat
@@ -168,10 +204,36 @@ document.addEventListener("keyup", (event) => {
       }
 
       //pizza score keeper
-      const pizzaScore = () => {
-      return pizzaTag.innerHTML += `<img>${pizzaW2}</img>`
 
+      let lastPizzaCount = 0; // Store the last score to prevent continuous updating
+
+      const pizzaScore = () => {
+        // Only update if the score has changed
+        if (getPizza !== lastPizzaCount) {
+          pizzaTag.innerHTML = ""; // Clear previous images
+      
+          // Add the new image corresponding to the pizza count
+          if (getPizza > 0 && getPizza <= pizzaArray.length) {
+            const img = document.createElement('img'); // Create a new image element
+            img.src = pizzaArray[getPizza - 1].src; // Set the src to the correct pizza image
+            img.alt = "pizza slice"; // Add alt text for accessibility
+            
+            pizzaTag.appendChild(img); // Append the image to the #pizza div
+          }
+      
+          lastPizzaCount = getPizza; // Update the last score
+        }
       }
+      
+      // const pizzaScore = () => {
+      //   if (getPizza > lastPizzaCount) {
+      //     pizzaTag.innerHTML = ""; // Clear existing images
+      //     for (let i = 0; i < getPizza; i++) {
+      //       pizzaTag.innerHTML += `<img class="pizzaScore" src="${pizzaArray[i].src}" alt="pizza slice" />`;
+      //     }
+      //     lastPizzaCount = getPizza;
+      //   }
+      // }
   //     return `
   // <div class="card">
   // <h2> ${toy.name}</h2>
@@ -311,37 +373,45 @@ document.addEventListener("keyup", (event) => {
 
       //main function to call entire game
       const draw = () => {
-        pizzaScore()
-        //clears canvas so we dont have a trail of rats
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        drawPizzaSlice()
-        //render image
+        // Clear canvas so we don't have a trail of rats
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+        // Draw pizza slice
+        drawPizzaSlice();
+        
+        // Render rat image
         drawRat();
-        //move Rat
-        moveRat()
-        //train
-        drawTrain()
-        //when rat meets train
-        rideTrain()
-        //generates people
-        drawPeople()
-
-        //walking ppl and train
-        moveIt()
-        //collision
-        collision()
-
-        //placement of top half of pillars for depth
-        pillarPerspective()
-        //slice positioning
-        randomizeSliceSpot()
-        // console.log(sliceX, sliceY, "Pizza")
-        // console.log(x, y ,"rat")
-        requestAnimationFrame(draw)
-
-
-
-          // console.log(getPizza)
+        
+        // Move rat
+        moveRat();
+        
+        // Draw train
+        drawTrain();
+        
+        // Rat meets train
+        rideTrain();
+        
+        // Generate people
+        drawPeople();
+        
+        // Move people and train
+        moveIt();
+        
+        // Check for collisions
+        collision();
+        
+        // Render pillars for depth
+        pillarPerspective();
+        
+        // Check pizza slice positioning
+        randomizeSliceSpot();
+        
+        // Update pizza score only when it changes
+        pizzaScore();
+      
+        // Request the next animation frame
+        requestAnimationFrame(draw);
       }
+      
 
       draw()

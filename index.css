@@ -4,17 +4,27 @@
 
 body{
   background: purple;
-  display: flex;
-  justify-content: center;
+  /* display: flex; */
+  /* justify-content: center; */
   font-family: 'Press Start 2p';
+  color: white;
 }
 canvas{
+  
   background-image: url("images/stationStation.png");
   /* background-repeat: no-repeat; */
   background-size: 100% 100%;
 
   /* background: black; */
   border: 4px solid green;
+}
+#canvas{
+  position: absolute;
+  /* top: 33%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+  
+ /* Ensures no unwanted margin or padding */
 }
 
 .pizza{
@@ -23,3 +33,89 @@ width: 100;
 
 }
 /* testing  */
+#pizza img {
+  width: 150px; /* Adjust size as needed */
+  height: auto;
+  display: inline-block;
+  /* opacity: 0;
+  transition: opacity 0.5s ease; */
+}
+/* #pizza img.show {
+  opacity: 1;
+} */
+
+#pizza {
+  position: absolute; /* or relative, depending on your layout */
+  top: 700px;
+  left: 121px;
+  z-index: 10; /* Ensure it's on top of other elements */
+}
+
+
+#controls {
+  position: absolute;
+  top: 716px;
+  left: 50%;
+}
+
+#controls button {
+  height: 60px;
+  width: 60px;
+  border-radius: 50px;
+}
+
+
+#controls  #up {
+  position: absolute;
+ top: 0;
+ left: 25px;
+}
+#controls #down {
+  position: absolute;
+  top: 68px;
+  left: 26px;
+}
+#controls #right {
+  position: absolute;
+  top: 21px;
+  left: 100px;
+}
+#controls #left {
+  position: absolute;
+  left: -45px;
+  top: 21px;
+}
+
+@media (max-width: 400px) {
+  #controls {
+    position: absolute;
+    top: 200%;
+    left: 118%;
+    transform: translate(-50%, -50%);
+}
+#controls button {
+  height: 200px;
+  width: 200px;
+  border-radius: 100px;
+}
+#controls #down {
+  position: absolute;
+  top: 178px;
+  left: 20px;
+}
+#controls #up {
+  position: absolute;
+  top: -143px;
+  left: 25px;
+}
+#controls #right {
+  position: absolute;
+  top: 21px;
+  left: 185px;
+}
+#controls #left {
+  position: absolute;
+  left: -126px;
+  top: 21px;
+}
+}
